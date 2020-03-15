@@ -6,9 +6,20 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { INTERVAL } from './constants'
 
 export default Vue.extend({
   name: 'App',
+  sockets: {
+    connect() {
+      const getData = () => {
+        this.$socket.client.emit('getCurrentData').emit('getNewRate')
+      }
+
+      getData()
+      setInterval(getData, INTERVAL)
+    },
+  },
 })
 </script>
 
