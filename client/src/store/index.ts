@@ -20,6 +20,9 @@ export default new Vuex.Store({
     goods(state) {
       return state.goods
     },
+    goodsByGroup(state) {
+      return groupBy(state.goods, (x: PreparedProduct) => x.groupId)
+    },
     rate(state) {
       return state.rate
     },
@@ -39,7 +42,6 @@ export default new Vuex.Store({
       state.rate = rate
     },
     updateNames(state, names) {
-      console.log('-- socketUpdateNames --', names)
       state.names = names
     },
   },
