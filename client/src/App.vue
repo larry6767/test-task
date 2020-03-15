@@ -6,10 +6,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { mapActions, mapGetters } from 'vuex'
+// local libs
 import { INTERVAL } from './constants'
 
 export default Vue.extend({
   name: 'App',
+  mounted() {
+    this.getNames()
+  },
+  methods: mapActions(['getNames']),
   sockets: {
     connect() {
       const getData = () => {

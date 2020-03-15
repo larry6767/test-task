@@ -9,10 +9,14 @@ Vue.use(Vuex)
 // by plugin vue-socket.io-extended when a socket event arrives.
 export default new Vuex.Store({
   state: {
+    names: null,
     goods: null,
     rate: null,
   },
   getters: {
+    names(state) {
+      return state.names
+    },
     goods(state) {
       return state.goods
     },
@@ -34,10 +38,19 @@ export default new Vuex.Store({
     socketNewRate(state, { rate }) {
       state.rate = rate
     },
+    updateNames(state, names) {
+      console.log('-- socketUpdateNames --', names)
+      state.names = names
+    },
   },
   actions: {
     socketErrorWhileReceivingData(ctx, data) {
       console.error('-- socketErrorWhileReceivingData --')
+    },
+    async getNames(ctx) {
+      const res = await fetch(`http://localhost:7000/api/names`)
+      const names = await res.json()
+      ctx.commit('updateNames', names)
     },
   },
 })
