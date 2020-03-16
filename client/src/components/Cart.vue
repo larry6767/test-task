@@ -24,7 +24,9 @@
               :min="1"
             />
             шт.
-            <div class="low-quantity">Количество ограничено</div>
+            <div class="low-quantity" v-if="product.inStock < 50">
+              Количество ограничено
+            </div>
           </td>
           <td>
             <span class="cost">{{ getLocalPrice(product.price) }} ₽ </span>
@@ -55,7 +57,7 @@
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
 import GettersMixin from '../mixins'
-import { CartProduct } from '../store/types'
+import { CartProduct } from '../types'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('cart')
 

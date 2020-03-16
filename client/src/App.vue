@@ -34,11 +34,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 // local libs
 import { INTERVAL } from './constants'
 import Cart from './components/Cart.vue'
 import GettersMixin from './mixins'
+import { RateClassObject, AppData } from './types'
 
 export default Vue.extend({
   name: 'App',
@@ -46,14 +47,11 @@ export default Vue.extend({
   components: {
     Cart,
   },
-  data(): {
-    rateHasGrown: null | boolean
-    rateAnimation: boolean
-  } {
+  data() {
     return {
       rateHasGrown: null,
       rateAnimation: false,
-    }
+    } as AppData
   },
   computed: {
     ...mapGetters(['goodsByGroup', 'goods']),
@@ -73,10 +71,7 @@ export default Vue.extend({
         height,
       }
     },
-    rateClassObject: function(): {
-      'rate-up': boolean
-      'rate-down': boolean
-    } {
+    rateClassObject: function(): RateClassObject {
       const x = this.rateAnimation
       const y = this.rateHasGrown
       return {

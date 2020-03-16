@@ -1,17 +1,18 @@
-import { PreparedProduct, CartProduct } from '../types'
+import { Module } from 'vuex'
+import { RootState, CartState, PreparedProduct, CartProduct } from '../../types'
 
-export default {
+export const cart: Module<CartState, RootState> = {
   namespaced: true,
   state: {
     goods: [],
   },
   getters: {
-    goods(state: any) {
+    goods(state) {
       return state.goods
     },
   },
   mutations: {
-    addToCart(state: any, product: PreparedProduct) {
+    addToCart(state, product: PreparedProduct) {
       let productFound = false
 
       state.goods.map((x: CartProduct) => {
@@ -30,10 +31,9 @@ export default {
         })
       }
     },
-    updateQuantity(state: any, e: any) {
+    updateQuantity(state, e) {
       const id = Number(e.target.dataset.id)
       const quantity = Number(e.target.value)
-      console.log(id, quantity)
       state.goods.map((x: CartProduct) => {
         // deliberately mutate below
         if (x.id === id) {
@@ -50,7 +50,7 @@ export default {
         // (*) I'm not sure about that. Tell me a solution later, please
       })
     },
-    removeFromCart(state: any, id: number) {
+    removeFromCart(state, id: number) {
       state.goods = state.goods.filter(
         (product: PreparedProduct) => product.id !== id
       )
