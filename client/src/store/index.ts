@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import groupBy from 'lodash/groupBy'
-// local libs
-import { cart } from './modules/cart'
-import { RootState, Product, PreparedProduct } from '../types'
+import { Product, PreparedProduct } from './types'
 
 Vue.use(Vuex)
 
 // Mutations and actions will be dispatched or committed automatically
 // by plugin vue-socket.io-extended when a socket event arrives.
-export default new Vuex.Store<RootState>({
+export default new Vuex.Store({
   state: {
     names: null,
     goods: null,
@@ -48,7 +46,7 @@ export default new Vuex.Store<RootState>({
     },
   },
   actions: {
-    socketErrorWhileReceivingData() {
+    socketErrorWhileReceivingData(ctx, data) {
       console.error('-- socketErrorWhileReceivingData --')
     },
     async getNames(ctx) {
@@ -56,8 +54,5 @@ export default new Vuex.Store<RootState>({
       const names = await res.json()
       ctx.commit('updateNames', names)
     },
-  },
-  modules: {
-    cart,
   },
 })
