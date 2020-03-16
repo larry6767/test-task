@@ -11,8 +11,7 @@
       <tbody>
         <tr v-for="product in goods" :key="`cart-${product.id}`">
           <td>
-            Алгоритмы. Построение и анализ. Т. Кормен, Ч. Лейзерсон, Р. Ривест,
-            К. Штайн. (1)
+            {{ getProductName(product.groupId, product.id) }}
           </td>
           <td>
             <input
@@ -28,7 +27,7 @@
             <div class="low-quantity">Количество ограничено</div>
           </td>
           <td>
-            <span class="cost">12463.31 ₽ </span>
+            <span class="cost">{{ getLocalPrice(product.price) }} ₽ </span>
             <span class="cost-quantity">/ шт.</span>
           </td>
           <td>
@@ -41,7 +40,9 @@
           <td colspan="4">
             <div class="total-cost-block">
               <span>Общая стоимость:</span>
-              <span class="total-cost">0 ₽</span>
+              <span class="total-cost"
+                >{{ getLocalPrice(getTotalCost()) }} ₽</span
+              >
             </div>
           </td>
         </tr>
@@ -53,14 +54,22 @@
 <script lang="ts">
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
+import GettersMixin from '../mixins'
+import { CartProduct } from '../store/types'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('cart')
 
 export default Vue.extend({
   name: 'Cart',
+  mixins: [GettersMixin],
   computed: mapGetters(['goods']),
   methods: {
     ...mapMutations(['removeFromCart', 'updateQuantity']),
+    getTotalCost() {
+      return this.goods.reduce((acc: number, x: CartProduct) => {
+        return (acc += x.price * x.quantity)
+      }, 0)
+    },
   },
 })
 </script>

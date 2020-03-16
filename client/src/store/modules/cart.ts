@@ -33,12 +33,21 @@ export default {
     updateQuantity(state: any, e: any) {
       const id = Number(e.target.dataset.id)
       const quantity = Number(e.target.value)
+      console.log(id, quantity)
       state.goods.map((x: CartProduct) => {
+        // deliberately mutate below
         if (x.id === id) {
-          x.quantity < x.inStock
-            ? (x.quantity = quantity)
-            : ((x.quantity = 0), (x.quantity = x.inStock)) // deliberately mutate
+          if (quantity <= 0) {
+            x.quantity = 0 // *
+            x.quantity = 1
+          } else if (quantity < x.inStock) {
+            x.quantity = quantity
+          } else {
+            x.quantity = 0 // *
+            x.quantity = x.inStock
+          }
         }
+        // (*) I'm not sure about that. Tell me a solution later, please
       })
     },
     removeFromCart(state: any, id: number) {

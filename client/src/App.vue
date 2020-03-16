@@ -21,7 +21,7 @@
                 }})
               </div>
               <div class="product-price" v-bind:class="rateClassObject">
-                {{ getLocalPrice(product.price, rate) }} ₽
+                {{ getLocalPrice(product.price) }} ₽
               </div>
             </li>
           </ul>
@@ -38,9 +38,11 @@ import { mapActions, mapGetters, mapMutations } from 'vuex'
 // local libs
 import { INTERVAL } from './constants'
 import Cart from './components/Cart.vue'
+import GettersMixin from './mixins'
 
 export default Vue.extend({
   name: 'App',
+  mixins: [GettersMixin],
   components: {
     Cart,
   },
@@ -54,7 +56,7 @@ export default Vue.extend({
     }
   },
   computed: {
-    ...mapGetters(['names', 'goodsByGroup', 'rate', 'goods']),
+    ...mapGetters(['goodsByGroup', 'goods']),
     listStyleObject: function(): { height: string } {
       // This solution allows the browser to display the list correctly
       // for any number of products.
@@ -91,9 +93,6 @@ export default Vue.extend({
       setTimeout(() => (this.rateAnimation = false), 300)
     },
   },
-  mounted() {
-    this.getNames()
-  },
   sockets: {
     connect() {
       const getData = () => {
@@ -104,19 +103,7 @@ export default Vue.extend({
       setInterval(getData, INTERVAL)
     },
   },
-  methods: {
-    ...mapActions(['getNames', 'cart/addToCart']),
-    ...mapMutations('cart', ['addToCart']),
-    getGroupName(groupId: number) {
-      return this.names[groupId].G
-    },
-    getProductName(groupId: number, productId: number) {
-      return this.names[groupId].B[productId].N
-    },
-    getLocalPrice(price: number, rate: number) {
-      return (price * rate).toFixed(2)
-    },
-  },
+  methods: mapMutations('cart', ['addToCart']),
 })
 </script>
 
