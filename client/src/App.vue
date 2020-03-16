@@ -7,8 +7,14 @@
           v-for="(group, groupId) in goodsByGroup"
           :key="groupId"
         >
-          <div class="group-header">{{ getGroupName(groupId) }}</div>
-          <ul class="product-list">
+          <div
+            class="group-header"
+            :class="{ 'group-header--rotate': hiddenGroups.includes(groupId) }"
+            @click.prevent="toggleGroup(groupId)"
+          >
+            {{ getGroupName(groupId) }}
+          </div>
+          <ul class="product-list" v-show="!hiddenGroups.includes(groupId)">
             <li
               class="product-item"
               v-for="product in group"
@@ -51,21 +57,25 @@ export default Vue.extend({
     return {
       rateHasGrown: null,
       rateAnimation: false,
+      hiddenGroups: [],
     } as AppData
   },
   computed: {
     ...mapGetters(['goodsByGroup', 'goods']),
     listStyleObject: function(): { height: string } {
-      // This solution allows the browser to display the list correctly
-      // for any number of products.
-      // It can be upgraded for even greater accuracy.
-      // But this is enough for the test.
-      const height =
-        this.goodsByGroup && this.goods
-          ? `${((Object.keys(this.goodsByGroup).length + this.goods.length) *
-              40) /
-              2}px`
-          : 'auto'
+      let count = 0
+      Object.keys(this.goodsByGroup).map(x => {
+        if (!this.hiddenGroups.includes(x)) {
+          count += this.goodsByGroup[x].length
+        }
+        count++
+      })
+
+      count = (count * 40) / 2 + 30
+
+      console.log(count)
+
+      const height = count > 0 ? `${count}px` : 'auto'
 
       return {
         height,
@@ -98,7 +108,14 @@ export default Vue.extend({
       setInterval(getData, INTERVAL)
     },
   },
-  methods: mapMutations('cart', ['addToCart']),
+  methods: {
+    ...mapMutations('cart', ['addToCart']),
+    toggleGroup(id: string) {
+      const index = this.hiddenGroups.indexOf(id)
+      if (~index) this.hiddenGroups.splice(index, 1)
+      else this.hiddenGroups.push(id)
+    },
+  },
 })
 </script>
 
@@ -138,12 +155,31 @@ export default Vue.extend({
 }
 
 .group-header {
+  position: relative;
   background: #d2dee2;
   border-bottom: 1px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
   text-align: start;
   padding: 2px 20px;
+  cursor: pointer;
+}
+
+.group-header::after {
+  position: absolute;
+  top: 10px;
+  left: 5px;
+  content: url('./assets/down-arrow.svg');
+  display: block;
+  width: 12px;
+  height: 12px;
+  transform: rotate(180deg);
+  transition: rotate 0.3s;
+}
+
+.group-header--rotate::after {
+  transform: rotate(0);
+  top: 3px;
 }
 
 .product-list {

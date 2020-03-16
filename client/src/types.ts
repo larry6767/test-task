@@ -37,4 +37,5 @@ export interface RateClassObject {
 export interface AppData {
   rateHasGrown: null | boolean
   rateAnimation: boolean
+  hiddenGroups: string[]
 }
