@@ -23,6 +23,8 @@
         </li>
       </ul>
     </div>
+    <Cart />
+    <img src="./assets/Cart.png" alt="" />
   </div>
 </template>
 
@@ -31,9 +33,13 @@ import Vue from 'vue'
 import { mapActions, mapGetters } from 'vuex'
 // local libs
 import { INTERVAL } from './constants'
+import Cart from './components/Cart.vue'
 
 export default Vue.extend({
   name: 'App',
+  components: {
+    Cart,
+  },
   data(): {
     rateHasGrown: null | boolean
     rateAnimation: boolean
@@ -116,8 +122,6 @@ export default Vue.extend({
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin: auto;
@@ -129,7 +133,6 @@ export default Vue.extend({
 
 .group-list {
   max-width: 100%;
-  /* height: 300px; */
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -141,7 +144,7 @@ export default Vue.extend({
 .group-item {
   flex-shrink: 1;
   width: calc(50% - 6px);
-  border: 1px solid #000000;
+  border: 1px solid #2c3e50;
   border-radius: 4px;
   margin: 3px;
   overflow: hidden;
@@ -149,7 +152,7 @@ export default Vue.extend({
 
 .group-header {
   background: #d2dee2;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #2c3e50;
   font-weight: bold;
   font-size: 16px;
   text-align: start;
@@ -165,7 +168,7 @@ export default Vue.extend({
 .product-item {
   font-size: 14px;
   display: flex;
-  border-bottom: 1px solid #000000;
+  border-bottom: 1px solid #2c3e50;
   cursor: pointer;
 }
 
