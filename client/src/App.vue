@@ -71,8 +71,7 @@ export default Vue.extend({
         count++
       })
 
-      count = (count * 40) / 2 + 30
-
+      count = (count * 35) / 2 + 50
       console.log(count)
 
       const height = count > 0 ? `${count}px` : 'auto'
