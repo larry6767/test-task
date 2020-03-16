@@ -9,20 +9,33 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr v-for="product in goods" :key="`cart-${product.id}`">
           <td>
             Алгоритмы. Построение и анализ. Т. Кормен, Ч. Лейзерсон, Р. Ривест,
             К. Штайн. (1)
           </td>
           <td>
-            <input class="quantity" type="number" value="1" /> шт.
+            <input
+              class="quantity"
+              type="number"
+              :value="product.quantity"
+              @input="updateQuantity"
+              :data-id="product.id"
+              :max="product.inStock"
+              :min="1"
+            />
+            шт.
             <div class="low-quantity">Количество ограничено</div>
           </td>
           <td>
             <span class="cost">12463.31 ₽ </span>
             <span class="cost-quantity">/ шт.</span>
           </td>
-          <td>Удалить</td>
+          <td>
+            <span class="remove" @click.prevent="removeFromCart(product.id)"
+              >Удалить</span
+            >
+          </td>
         </tr>
         <tr>
           <td colspan="4">
@@ -39,8 +52,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { createNamespacedHelpers } from 'vuex'
+
+const { mapGetters, mapMutations } = createNamespacedHelpers('cart')
+
 export default Vue.extend({
   name: 'Cart',
+  computed: mapGetters(['goods']),
+  methods: {
+    ...mapMutations(['removeFromCart', 'updateQuantity']),
+  },
 })
 </script>
 
@@ -55,23 +76,29 @@ table {
   color: #2c3e50;
 }
 
-thead td {
-  border-bottom: 1px solid #2c3e50;
-}
-
 td {
   text-align: start;
   width: calc(50% / 3);
   padding: 12px;
 }
 
+thead td {
+  border-bottom: 1px solid #2c3e50;
+}
+
 tbody td {
   padding: 20px 12px;
   vertical-align: top;
+  border-top: 1px solid #2c3e50;
 }
 
 tbody td:last-child {
   text-align: end;
+}
+
+tbody tr:first-child td,
+tbody tr:last-child td {
+  border-top: none;
 }
 
 td:first-child {
@@ -106,6 +133,10 @@ td:first-child {
 .cost-quantity {
   font-weight: bold;
   font-size: 16px;
+}
+
+.remove {
+  cursor: pointer;
 }
 
 .total-cost-block {

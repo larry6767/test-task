@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import groupBy from 'lodash/groupBy'
+// local libs
+import cart from './modules/cart'
 import { Product, PreparedProduct } from './types'
 
 Vue.use(Vuex)
@@ -46,7 +48,7 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    socketErrorWhileReceivingData(ctx, data) {
+    socketErrorWhileReceivingData() {
       console.error('-- socketErrorWhileReceivingData --')
     },
     async getNames(ctx) {
@@ -54,5 +56,8 @@ export default new Vuex.Store({
       const names = await res.json()
       ctx.commit('updateNames', names)
     },
+  },
+  modules: {
+    cart,
   },
 })

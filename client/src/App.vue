@@ -9,7 +9,12 @@
         >
           <div class="group-header">{{ getGroupName(groupId) }}</div>
           <ul class="product-list">
-            <li class="product-item" v-for="product in group" :key="product.id">
+            <li
+              class="product-item"
+              v-for="product in group"
+              :key="product.id"
+              @click.prevent="addToCart(product)"
+            >
               <div class="product-name">
                 {{ getProductName(groupId, product.id) }} ({{
                   product.inStock
@@ -24,13 +29,12 @@
       </ul>
     </div>
     <Cart />
-    <img src="./assets/Cart.png" alt="" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 // local libs
 import { INTERVAL } from './constants'
 import Cart from './components/Cart.vue'
@@ -101,7 +105,8 @@ export default Vue.extend({
     },
   },
   methods: {
-    ...mapActions(['getNames']),
+    ...mapActions(['getNames', 'cart/addToCart']),
+    ...mapMutations('cart', ['addToCart']),
     getGroupName(groupId: number) {
       return this.names[groupId].G
     },

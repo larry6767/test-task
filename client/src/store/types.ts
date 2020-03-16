@@ -14,3 +14,7 @@ export interface PreparedProduct {
   price: number
   inStock: number
 }
+
+export interface CartProduct extends PreparedProduct {
+  quantity: number
+}
