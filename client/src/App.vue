@@ -44,7 +44,7 @@ import { mapGetters, mapMutations } from 'vuex'
 // local libs
 import { INTERVAL } from './constants'
 import Cart from './components/Cart.vue'
-import GettersMixin from './mixins'
+import GettersMixin from './mixins/GettersMixin'
 import { RateClassObject, AppData } from './types'
 
 export default Vue.extend({
@@ -64,7 +64,7 @@ export default Vue.extend({
     ...mapGetters(['goodsByGroup', 'goods']),
     listStyleObject: function(): { height: string } {
       let count = 0
-      Object.keys(this.goodsByGroup).map(x => {
+      Object.keys(this.goodsByGroup).forEach(x => {
         if (!this.hiddenGroups.includes(x)) {
           count += this.goodsByGroup[x].length
         }
@@ -72,7 +72,6 @@ export default Vue.extend({
       })
 
       count = (count * 35) / 2 + 50
-      console.log(count)
 
       const height = count > 0 ? `${count}px` : 'auto'
 

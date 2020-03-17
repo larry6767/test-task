@@ -8,7 +8,7 @@
           <td colspan="2">Цена</td>
         </tr>
       </thead>
-      <tbody>
+      <tbody v-if="goods.length">
         <tr v-for="product in goods" :key="`cart-${product.id}`">
           <td>
             {{ getProductName(product.groupId, product.id) }}
@@ -49,6 +49,11 @@
           </td>
         </tr>
       </tbody>
+      <tbody v-else>
+        <tr>
+          <td class="no-goods" colspan="4">Пока в вашей корзине нет товаров</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -56,7 +61,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { createNamespacedHelpers } from 'vuex'
-import GettersMixin from '../mixins'
+import GettersMixin from '../mixins/GettersMixin'
 import { CartProduct } from '../types'
 
 const { mapGetters, mapMutations } = createNamespacedHelpers('cart')
@@ -162,5 +167,11 @@ td:first-child {
   color: #ff761a;
   font-weight: bold;
   margin-left: 5px;
+}
+
+.no-goods:last-child {
+  font-size: 16px;
+  color: #ff761a;
+  text-align: center;
 }
 </style>
